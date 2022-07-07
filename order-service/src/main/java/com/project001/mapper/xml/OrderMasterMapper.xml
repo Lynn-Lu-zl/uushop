@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project001.mapper.OrderMasterMapper">
+
+
+    <!--接口4：将传入的buyer_openid==参数1param1、order_id==参数2param2（虽然是string类型但是在接口已经定义了数据类型为string，不用在param2+单引号），对应的订单状态改为2，取消订单-->
+    <update id="cancel">
+      update order_master set order_status = 2  where buyer_openid = #{param1} and order_id= #{param2}
+    </update>
+
+    <!--接口5：修改order_status订单状态为1-->
+    <update id="finish">
+         update order_master set order_status = 1  where order_id= #{param1}
+
+    </update>
+
+    <!--接口6:修改payStatus订单状态为1-->
+    <update id="pay">
+         update order_master set pay_status = 1  where buyer_openid = #{param1} and order_id= #{param2}
+    </update>
+
+
+    <update id="updateStatusByOrderId">
+        update
+          order_master
+        set
+          order_status = #{param2}
+        where
+          order_id= #{param1}
+    </update>
+
+    <select id="bar" resultType="com.project001.dto.BarDTO">
+        select
+        product_name name,
+        sum(product_quantity)value
+        from
+        order_detail
+        group by
+        product_name
+    </select>
+    <select id="baseLine" resultType="com.project001.dto.BaseLineDTO">
+
+        select
+        DATE_FORMAT(create_time, '%Y-%m-%d') date,
+        sum(product_quantity) value
+        from order_detail
+        group by
+        date
+        order by
+        date
+    </select>
+    <select id="findAllNames" resultType="java.lang.String">
+
+        select
+        product_name
+        from
+        product_info
+    </select>
+    <select id="findAllDates" resultType="java.lang.String">
+
+        select
+        distinct
+        DATE_FORMAT(order_detail.create_time, '%Y-%m-%d') as dd
+        from
+        order_detail
+        order by
+        dd
+    </select>
+    <select id="findDatas" resultType="java.lang.Integer">
+
+        select
+                (select ifnull(sum(product_quantity),0)
+                from order_detail
+                where
+        pi.product_id = order_detail.product_id
+        and
+        DATE_FORMAT(order_detail.create_time, '%Y-%m-%d') = mm.dd
+        ) as count
+        from product_info pi,
+         (select
+         distinct DATE_FORMAT(order_detail.create_time, '%Y-%m-%d') as dd
+         from order_detail
+         )as mm
+
+          where
+          pi.product_name = #{name}
+          order by
+          mm.dd
+    </select>
+
+
+</mapper>

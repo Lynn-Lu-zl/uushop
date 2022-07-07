@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project001.mapper.ProductInfoMapper">
+
+
+
+    <!--<resultMap id="BaseResultMap" type="com.project001.entity.ProductInfo">-->
+        <!--<id column="product_id" jdbcType="VARCHAR" property="productId"></id>-->
+        <!--<result column="product_name" jdbcType="VARCHAR" property="productName"></result>-->
+        <!--<result column="product_price" jdbcType="DECIMAL" property="productPrice"></result>-->
+        <!--<result column="product_stock" jdbcType="INTEGER" property="productStock"></result>-->
+        <!--<result column="product_description" jdbcType="VARCHAR" property="productDescription"></result>-->
+        <!--<result column="category_type" jdbcType="INTEGER" property="categoryType"></result>-->
+        <!--<result column="product_status" jdbcType="INTEGER" property="productStatus"></result>-->
+        <!--</resultMap>-->
+
+    <!--<select id="findPriceById" resultMap="BaseResultMap" >-->
+        <!--select product_price from product_info where product_id = #{id}-->
+    <!--</select>-->
+
+    <!--写完自定义sql语句回到-->
+    <select id="findPriceById" resultType="java.math.BigDecimal">
+        select product_price from product_info where product_id = #{id}
+    </select>
+
+    <select id="findStockById" resultType="java.lang.Integer">
+        select
+          product_stock
+        from
+          product_info
+        where
+          product_id = #{id}
+    </select>
+
+    <!--将id等于参数1param1的库存更新变成参数2param2-->
+    <update id="updateStockById">
+        update product_info set product_stock = #{param2} where product_id= #{param1}
+    </update>
+
+    <delete id="updateStatusById">
+        update
+          product_info
+        set
+          product_status = #{param2}
+        where
+          product_id = #{param1}
+    </delete>
+
+</mapper>

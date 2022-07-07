@@ -1,0 +1,13 @@
+server:
+  port: 8083
+jdwx:
+  url: https://way.jd.com/chuangxin/dxjk
+  appkey: 91b467b31cd11ca773fae120f3327594
+  sign: UUShop
+spring:
+  application:
+    name: sms-service
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
